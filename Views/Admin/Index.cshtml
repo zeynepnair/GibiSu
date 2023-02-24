@@ -1,0 +1,21 @@
+﻿@using GibiSu.Data;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Pasta Grafik2</title>
+</head>
+<body>
+    <center>
+   <h1>Hoşgeldin - @User.FindFirstValue(ClaimTypes.Name)</h1>
+   </center>
+</body>
+</html>

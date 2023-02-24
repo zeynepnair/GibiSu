@@ -1,0 +1,415 @@
+﻿@using GibiSu.Data;
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext context
+@using System.Security.Claims;
+@inject IHttpContextAccessor Httpcontext
+@{
+    List<Menu> menus = context.Menus.Include(t => t.Pages).ToList();
+    List<Page> pages = context.Pages.Where(c => c.MenuId == null).ToList();
+    List<Content> contentss = context.Contents.OrderBy(d=>d.PageUrl).ToList();
+    string userName = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    List<OrderProduct> carts = context.OrderProducts.Include(o => o.Order).Include(o => o.Product).Where(o => o.Order.OrderDate == null).Where(o => o.Order.UserId == userName).ToList();
+    int ProductCount = 0;
+    foreach(OrderProduct cart in carts)
+    {
+        ProductCount = ProductCount + cart.Amount;
+    }
+    bool askCookie = false;
+    if (Httpcontext.HttpContext.Request.Cookies["isim1"] == null)
+    {
+        askCookie = true;
+    }
+    DateTime dt = DateTime.Now;
+    string year = dt.Year.ToString();
+}
+<!--Title Start-->
+<script>
+        
+    function mybtn(ID) {
+
+        var toggle = ID + "-list";
+
+        var y = document.getElementById(toggle);
+        if (y.style.display != "none") {
+            y.style.display = "none";
+        } else {
+            $(".boxclose").css("display", "none");
+            y.style.display = "block";
+        }
+
+        $("*").click(function (event) {
+            if (!$(event.target).is(".box")) {
+
+                return y.style.display = "none";
+            }
+        });
+    }
+</script>
+ <script>
+        
+        function kukivarmi(a) {
+            if(a=="kabul"){
+            $.post("@Url.Action("kuki","Pages")?a="+a);
+            $("#cookiee").css("display", "none");
+            }
+            if (a=="red"){
+                 $.post("@Url.Action("kuki","Pages")?a="+a);
+                 $("#PrivacyTop").css("display","none");
+                 $("#PrivacyGhost").css("display","none");
+                 $("#cookiee").css("display", "block");
+                 alert("Cookieler Silindi.. Baran Bey'e Yönlendiriliyorsunuz.")
+                 
+            }  
+        }
+</script>
+<!--Title End-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/GibiSu.styles.css" asp-append-version="true" />
+    <link rel="icon" sizes="16x16" href="https://i.ibb.co/JtdRzwR/Whats-App-Image-2023-01-10-at-12-54-28-removebg-preview.png" />
+    <link href="~/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body onscroll="scrollX()" id="body">
+  
+   
+    <div onclick="ghostt()" id="ghosttt" style="display:none; position: fixed;z-index: 9999;inset: 0px;background: rgb(85, 85, 85);opacity: 0.8;">
+    </div>
+    <!--Privacy Start-->
+    <div id="PrivacyTop" class="PrivacyTop">
+        <div class="PrivacyImg">
+            <div id="evidon-prefdiag-nav-spacerdiv1" style="display: block; height: 20px;"></div>
+            <img src="https://i.ibb.co/JtdRzwR/Whats-App-Image-2023-01-10-at-12-54-28-removebg-preview.png" alt="Logo Image" style="display: block; margin: 1em auto; width: 170px; height: auto; background: transparent; color: rgb(255, 255, 255); border: none; padding: 0px;">
+            <div id="evidon-prefdiag-nav-spacerdiv2" style="display: block; height: 20px;"></div>
+            <nav id="evidon-navigation-wrapper-element" aria-labelledby="evidon-navigation-label">
+                <div id="evidon-navigation-label" style="display: none;">Privacy dialog navigation</div>
+                <ul id="evidon-navigation-list" style="list-style: none; margin: 0px; padding: 0px;">
+                    <li style="width: 100%;">
+                        <div id="evidon-prefdiag-nav-0" data-id="0" class="evidon-prefdiag-sidebarlink" role="button" tabindex="0" style="padding: 12px; cursor: pointer; display: block; box-sizing: content-box; font-family: sans-serif; font-size: 0.8em; line-height: 1.5; margin: 0px; text-align: left; background: rgb(255, 255, 255); color: rgb(0, 0, 0); white-space: normal !important;">
+                            <a class="text-muted" style="text-decoration:none; color:black;" href="/gizlilik-ayarlari">
+                                <strong>Gizlilik Ayarları</strong>
+                            </a>
+                        </div>
+                    </li>
+                    <li style="width: 100%;">
+                        <div id="evidon-prefdiag-nav-1" data-id="1" class="evidon-prefdiag-sidebarlink" role="button" tabindex="0" style="padding: 12px; cursor: pointer; display: block; box-sizing: content-box; font-family: sans-serif; color: rgb(102, 102, 102); font-size: 0.8em; line-height: 1.5; margin: 0px; text-align: left; white-space: normal !important;">
+                            <div>
+                                <a class="text-muted" style="text-decoration:none;" href="/Gizlilik-politikasi">Gizlilik Politikası</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="PrivacyBody">
+            <button onclick="PrivacyClose()" class="PrivacyClose">x</button>
+        </div>
+        <div class="PrivacyCon">
+            <div class="PrivacyContent">
+                <h1 style="display: block; text-align: center;margin: 0px 0px 0.75em;font-size: 0.9em; font-weight: 600; font-family: sans-serif; color: rgb(0, 0, 0); line-height: 1.5;">
+                    Topladığımız bilgiler
+                </h1>
+                    <div class="PrivacyText">
+                            @foreach (var item in contentss)
+                            {
+                                @if(item.PageUrl == "Gizlilik-ayarlari"){
+                                @if (item.Text != null)
+                                {
+                                    @Html.Raw(item.Text.Replace("\r\n","<br/>"))
+                                }
+                                }
+                            }
+                    </div>
+            </div>
+        </div>
+        <div  style="position: absolute; bottom: 13px; left: 214px; right: 3px; text-align: right; border-top: 1px solid rgb(211, 211, 211); padding: 4px 0px; background: rgb(255, 255, 255); display: block;"><button onclick="PrivacyClose()" id="evidon-prefdiag-decline" class="evidon-prefdiag-declinebtn" aria-label="İptal" style="margin: 0px; padding: 1em; color: rgb(0, 0, 0); background: rgb(255, 255, 255); cursor: pointer; border: 0px solid rgb(255, 255, 255); font-family: sans-serif; font-size: 0.85em; width: 50%; height: 100%; text-decoration: underline;">İptal</button><button onclick="PrivacyGhost()" id="evidon-prefdiag-accept" class="evidon-prefdiag-acceptbtn" aria-label="Çerez iznini geri al" style="display: inline-block; margin: 0px; width: 50%; height: 100%; padding: 1em; color: rgb(0, 0, 0); background: rgb(255, 255, 255); cursor: pointer; border: 0px solid rgb(255, 255, 255); font-family: sans-serif; font-size: 0.85em; text-decoration: underline;">Çerez iznini geri al</button></div>
+        <div  id="PrivacyGhost" style="position: absolute; display: none; width: 50%; top: 10%; left: 25%; background: rgb(255, 255, 255); color: rgb(51, 51, 51); border: 1px solid rgb(170, 170, 170); box-shadow: rgb(170, 170, 170) 1px 1px; z-index: 999999;"><button onclick="PrivacyGhost()"  style="display: block; position: absolute; top: 8px; right: 8px; height: 12px; width: 12px; cursor: pointer; z-index: 100; border: 0px; padding: 0px; background: transparent;">x</button><div id="evidon-withdraw-consent-title" style="display: block; text-align: center; margin: 0px 0px 0.75em; font-size: 0.9em; font-weight: 600; font-family: sans-serif; color: rgb(0, 0, 0); line-height: 1.5;">Bilgi ve Çerez İzni Tercihleriniz</div><div id="evidon-withdraw-consent-message" style="display: block; margin: 0px 0px 0.75em; font-size: 0.8em; line-height: 1.5; color: rgb(0, 0, 0); font-family: sans-serif; text-align: left; padding: 0px 1em !important;">Web sitemizi ziyaret eden kullanıcılarıın ve müşterilerimizin gizliliğini ve güvenliğini oldukça önemsiyoruz. Eğer ne tür bilgi topladığımızı öğrenmek ve kontrol etmek isterseniz çerez onayına erişebilir ve verdiğiniz çerez iznini dilediğiniz zaman iptal edebilirsiniz. Çerezleri engellemek veya silmek kullanıcı deneyiminiz etkilenebilir ve sitemizin bazı fonksiyonlardan (sitede çevrimiçi kalmak gibi) yararlanmanıza engel olabilir. Çerezleri engellediğinizde, başka sitelerde reklamlarımızı görmeye devam edebilirsiniz fakat bu reklamların mesajı ve içeriği ilgi alanınıza göre olmayabilir.</div><div id="" style="display: block; padding: 12px; text-align: center; margin: 18px auto;"><button onclick="PrivacyGhost()" aria-label="Hayır, izin ver" style="display: inline-block; margin: 0px; padding: 1em; color: rgb(0, 0, 0); background: rgb(255, 255, 255); cursor: pointer; border: 0px solid rgb(255, 255, 255); font-family: sans-serif; font-size: 0.85em; width: 50%; height: 100%; text-decoration: underline;">Hayır, izin ver</button><button  aria-label="Evet, çerez iznini geri al" style="display: inline-block; margin: 0px; width: 50%; height: 100%; padding: 1em; color: rgb(0, 0, 0); background: rgb(255, 255, 255); cursor: pointer; border: 0px solid rgb(255, 255, 255); font-family: sans-serif; font-size: 0.85em; text-decoration: underline;"> <a href="https://www.instagram.com/barant004/" onclick="kukivarmi('red')" href="#">Evet, çerez iznini geri al</a> </button></div></div>
+        
+    </div>
+
+    <!--Privacy End-->
+    <div class="position-relative">
+        <div class="position-fixed " style="z-index:1000; right:0px; top:75px;">
+            <img style="cursor:pointer;" onclick="ghostt()" src="https://d6tizftlrpuof.cloudfront.net/themes/production/nestle-waters-button-095e535bf54b3ef0961638d40f3b1830.png" width="40" height="130">
+        </div>
+
+    </div>
+    <header class="fixed-top">
+        <nav id="navbar-main" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow ">
+            <div class="container-fluid ">
+                <a onclick="Barant()" class="navbar-brand py-1" asp-area="" asp-controller="Pages" asp-action="Index"> <img width="60" src="https://i.ibb.co/JtdRzwR/Whats-App-Image-2023-01-10-at-12-54-28-removebg-preview.png" alt=""> </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 justify-content-center">
+                        @foreach (Menu menu in menus)
+                        {
+                            <li class="nav-item menu-item--expanded dropdown">
+                                @if (menu.Name.Trim() != "footer")
+                                {
+                                    <a style="cursor:pointer;" id="topMenu-@menu.Id.ToString()" class="box nav-link text-dark dropdown-toggle nav-link" onclick="mybtn(this.id)">
+                                        @menu.Name.Trim()
+                                    </a>
+                                }
+
+                                <ul class="dropdown-menu show boxclose" id="topMenu-@menu.Id.ToString()-list" style="display:none; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 33px);padding-top: 18px;padding-bottom: 0px; padding-left: 15px;padding-right: 15px;">
+                                    @foreach (Page pageis in menu.Pages)
+                                    {
+                                        <li class="boxclosee dropdownitem" style="">
+                                            @if (menu.Name.Trim() != "footer")
+                                            {
+                                                <a style="text-decoration:none;" href="/@pageis.Url">@pageis.Title</a>
+
+                                                <br />
+
+                                                <br />
+                                            }
+                                        </li>
+                                    }
+
+                                </ul>
+                            </li>
+
+                        }
+                        @foreach (Page pageis in pages)
+                        {
+                            @if (pageis.Title.Trim() != "Ana Sayfa")
+                            {
+                                <li class="nav-item">
+                                    <a href="/@pageis.Url" class="nav-link text-dark">@pageis.Title</a>
+                                 </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <a style="margin-right:15px; text-decoration-line:none;" href="/urunlerimiz">Ürünlerimiz</a>
+                <a style="margin-right:15px; text-decoration-line:none;" href="/siparislerim">Siparişlerim</a>
+                <a style="margin-right:15px; text-decoration-line:none;" href="/sepetim">
+                    
+                        <i class="fa " style="font-size:20px">&#xf07a;</i>
+                    @if (ProductCount != 0)
+                    {
+                        <span class='badge badge-warning' id='lblCartCount'> @ProductCount </span>
+                    }
+                </a>
+                <div class="dropdown">
+                    <button onclick="OpenSearch()" style="background-color:transparent; border:0;">
+                        <i style="color:white;margin-bottom:-15px; font-size:20px; " class="fa-sharp fa-solid fa-magnifying-glass"></i>
+                    </button>
+                    <form asp-controller="Products" asp-action="Index" >
+                    <div class="dropdown-menu" id="searchmenu" style="display: none;">
+                        <label>Anahtar Kelimeler</label>
+                            <input style="border-radius:3px;border: solid 1px #215fac ;" placeholder=" Ara..." name="search" value="@ViewData["Search"]" />
+                            <div style="text-align:center;">
+                                <input class="sub" type="submit" value="Search" />
+                            </div>
+                    </div>
+                    </form>
+                </div>
+                <partial name="_LoginPartial" />
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid contentF" style="padding:0px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <section class="">
+        <!-- Footer -->
+        <footer class="text-white text-center text-md-start ">
+            <!-- Grid container -->
+            <div class="container p-4">
+                <!--Grid row-->
+                <div class="row">
+                    <!--Grid column-->
+                    <div style=" border-right: 1px solid white;" class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                        <p>
+                            Gelecekten Gelen Lezzet Gibi'Suu!
+                        </p>
+                        <br />
+                        <a class="socialmediaIconn" href="https://twitter.com/barant004">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a class="socialmediaIconn">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a class="socialmediaIconn" href="https://www.instagram.com/barant004/">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a class="socialmediaIconn" href="">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                    <!--Grid column-->
+                    <!--Grid column-->
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        @foreach (Menu menu in menus)
+                        {
+                            @if (menu.Name.Trim() == "footer")
+                            {
+                                @*<h5 class="text-uppercase"><a style="text-decoration:none;" href="/kullanim-kosullari" class="text-white">Kullanım Koşulları</a></h5>*@
+                                <ul class="list-unstyled mb-0 ">
+                                    @foreach (Page pageis in menu.Pages)
+                                    {
+                                        <li class="menu-item">
+                                            <a style="text-decoration:none;" href="/@pageis.Url" class="text-white">@pageis.Title</a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- Copyright -->
+            <div class="text-end p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © @year Copyright:
+                <a class="text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
+        <!-- Footer -->
+    </section>
+    <button id="backtotop" @*style="display: inline-block;*@"> <a href="#">Back to top</a> </button>
+    <a onclick="PrivacyClose()" tabindex="0" style="position: fixed; padding: 0.5em 0.75em; border: 0px solid transparent; cursor: pointer; line-height: 1.5; text-decoration: none; background: rgb(0, 107, 175); font-size: 0.75em; color: rgb(255, 255, 255); z-index: 2147483600; bottom: 0px; right: 1em; font-family: sans-serif;"><span id="_evidon-button-text" class="evidon-consent-button-text" style="vertical-align: middle !important;">Gizlilik Ayarları</span><img id="_evh-newvendor-indicator" src="//c.evidon.com/sitenotice/images/evidon-change-alert.png" alt="New vendors have been added to this site" style="display: none; position: absolute; left: -10px; top: -10px; width: 23px; height: 23px;"></a>
+
+    <div id="ghostt" tabindex="0" style="display:none; width:auto; height:auto; border-radius:5px; position: fixed; padding:20px; border: 0px solid transparent; line-height: 1.5; text-decoration: none; background: white; font-size: 0.75em; z-index: 2147483600; top: 50%; right: 50em; font-family: sans-serif;">
+        <div>
+        <a onclick="ghostt()" href="#" class="close" role="button" aria-label="undefined" tabindex="0">x</a>
+        </div>
+        <div style="vertical-align: middle !important; margin-top:20px;">
+            <p class="text-muted">
+                Web sitemizi nasıl buldunuz?
+            </p>
+        </div>
+        <div style="justify-content: center; column-gap: 30px; display: flex; text-align: center;">
+        <a>
+            <i style="font-size: 25px; color: yellowgreen;" class="fa-solid fa-face-smile"></i>
+        </a>
+        <a>
+            <i style="font-size: 25px; color: yellowgreen;" class="fa-solid fa-face-angry"></i>
+        </a>
+        <a>
+            <i style="font-size: 25px; color: yellowgreen;" class="fa-solid fa-face-smile"></i>
+        </a>
+        </div>
+    </div>
+        @if (askCookie==true)
+    {
+        <!--Cookie Start-->
+        <div id="cookiee" style="position: fixed; width: 100%; background: rgb(255, 255, 255); color: rgb(0, 0, 0); bottom: 0px; left: 0px; border: 0px solid transparent; padding: 1em 1em 1.25em; box-sizing: border-box; text-align: center; box-shadow: rgba(0, 0, 0, 0.1) 0px -8px 8px; font-size: 14px; z-index: 2147483601 !important;">
+            <div style="display: block; font-size: 1em; text-align: center; margin: 0px 0px 0.5em; font-family: sans-serif; font-weight: bold; color: rgb(0, 0, 0); line-height: 1.5;">
+                Bu sitedeki çerezler hakkında
+            </div>
+            <div style="display: block; margin: 0px 0px 1em; font-family: sans-serif; color: rgb(0, 0, 0); font-size: 0.85em; text-align: center; line-height: 1.5;">
+                Gibi Su ve Meşrubat San. ve Tic. A.Ş. ("Gibi") olarak biz ve iş ortaklarımız, sitemizdeki deneyiminizi iyileştirmek ve ilgi alanlarınıza uygun reklamlar göstermek için çerezleri kullanıyoruz. Kabul Et butonuna tıklamanız çerezlerin kullanımı için izin verdiğiniz anlamına gelmektedir. Daha fazla bilgi için
+                <a style="font-weight:bold;color:black" href="/kisisel-verilerin-korunmasi">
+                    Gizlilik Politikamızı
+                </a> inceleyebilirsiniz.
+                <a style="font-weight:bold;color:black" href="#">
+                    Gizlilik Ayarlarına
+                </a>
+                tıklayarak çerez tercihlerinizi değiştirebilirsiniz.
+            </div>
+            <button style="display: inline; border: 0px; background: transparent; color: rgb(0, 0, 0); padding: 1em; cursor: pointer; border-radius: 0px; font-size: 0.85em; font-family: sans-serif; margin: 0px 0px 0px 1em; text-decoration: underline;">
+                <strong onclick="kukivarmi('kabul')">Kabul Et</strong>
+            </button>
+        </div>
+
+        }
+    
+   
+    <!--Cookie End-->
+    <script>
+        let docTitle = document.title;
+        window.addEventListener("blur", () => {
+            document.title = "Come back :(";
+        })
+        window.addEventListener("focus", () => {
+            document.title = docTitle;
+        });
+
+        function ghostt() {
+            var ghost = document.getElementById("ghosttt");
+            var ghost2 = document.getElementById("ghostt");
+            var bodyy = document.getElementById("body");
+            
+            if (ghost.style.display != "none") {
+                ghost.style.display = "none";
+                bodyy.style.overflow = "visible";
+            } else {
+                ghost.style.display = "block";
+                bodyy.style.overflow = "hidden";
+            }
+            if (ghost2.style.display != "none") {
+                ghost2.style.display = "none";
+            } else {
+                ghost2.style.display = "block";
+            }
+        }
+
+        function scrollX() {
+
+            var scrollx = document.getElementById("backtotop");
+            var limit = 300;
+            var st = $(this).scrollTop();
+
+            if (st <= limit) {
+
+                scrollx.style.opacity = "0";
+
+
+            }
+            else {
+                scrollx.style.opacity = "1";
+
+            }
+        }
+        function PrivacyClose() {
+            var PrivacyTop = document.getElementById("PrivacyTop");
+            if (PrivacyTop.style.display != "block") {
+                PrivacyTop.style.display = "block";
+
+            } else {
+                PrivacyTop.style.display = "none";
+            }
+        }
+
+        function PrivacyGhost() {
+            var PrivacyGhost = document.getElementById("PrivacyGhost");
+            if (PrivacyGhost.style.display != "none") {
+                PrivacyGhost.style.display = "none";
+
+            } else {
+                PrivacyGhost.style.display = "block";
+            }            
+        }
+
+
+        
+        
+         function OpenSearch() {
+            var menu = document.getElementById("searchmenu");
+                if (menu.style.display != "none") {
+                    menu.style.display = "none";
+
+            } else {
+                    menu.style.display = "block";
+            }
+         }
+    </script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

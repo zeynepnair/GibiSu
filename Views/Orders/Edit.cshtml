@@ -1,0 +1,67 @@
+﻿@model GibiSu.Models.Order
+@using GibiSu.Data;
+@inject ApplicationDbContext context;
+@using Microsoft.EntityFrameworkCore;
+@using System.Security.Claims;
+@{
+    string userName = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var applicationDbContext = context.OrderProducts.Include(o => o.Order).Include(o => o.Product).Where(o => o.Order.OrderDate == null).Where(o => o.Order.UserId == userName);
+    ViewData["Title"] = "Edit";
+}
+
+<h2 style="text-align:center;color:white;">Siparişi Onayla</h2>
+<hr />
+<div class="container my-4">
+    <table asp-for="OrderProducts" class="table">
+        @foreach (var item in applicationDbContext)
+        {
+           @* <div class="order">*@
+                <tr style="background-color:white;vertical-align:middle;">
+                    <td>
+                        <img src='data:image/jpeg;base64,@Convert.ToBase64String(item.Product.Image)'  style="width: 90px; height: 80px;margin-right: 20px;" />
+                    </td>
+                        <td style="font-size:17px;margin-right: 10px;" class="product-card-title">
+                            @item.Product.Name
+                        </td>
+                <td>
+                        X @item.Amount
+                </td>
+                    <td style="color:#0d6efd;">
+                        <strong>@item.TotalPrice TL</strong>
+                    </td>
+                    </tr>
+                @*</div>*@
+        }
+    </table>
+
+<div class="row" style="justify-content:center;">
+    <div class="col-md-4" style="width:40%;">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group" style="color:white;">
+                <label asp-for="Address" class="control-label"></label>
+                <textarea asp-for="Address" class="form-control" ></textarea>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+                <div class="form-group" style="color:white;">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" ></>
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+                <div class="form-group" style="text-align: center;margin-top: 10px;">
+                <input type="submit" value="Siparişi Onayla" class="btn btn-primary" />
+                <a class="btn btn-primary" asp-controller="orderProducts" asp-action="Index">Sepete Dön</a>
+            
+                </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

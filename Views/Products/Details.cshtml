@@ -1,0 +1,60 @@
+﻿@model GibiSu.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+
+<div style="margin-top:180px">
+   
+    <div class="container my-4">
+        <div class="row mt-9">
+            <div class="col-md-6 col-lg-6 product-details-img-col mb-4">
+                <img src='data:image/jpeg;base64,@Convert.ToBase64String(Model.Image)' class="product-details-img" />
+                <div class="product-details-price-container my-md-4 my-4">
+                    <div class="product-details-price">@Html.DisplayFor(model => model.Price) TL</div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <h1 class="product-details-title">
+                    @Html.DisplayFor(model => model.Name)
+                </h1>
+                <div class="d-flex mt-4 align-item-center product-details-shareContainer">
+                    <button class="btn product-details-shareBtn"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#product-details-social">
+                        <span>
+                            <i class="fa-regular fa-share-from-square"></i>
+                        </span>
+                        <span> Paylaş </span>
+                    </button>
+                    <div id="product-details-social" class="collapse">
+                        <div class="social-container">
+                            <ul class="social-icons">
+                                <li>
+                                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 product-details-description">
+                    @Html.DisplayFor(model => model.Description)
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<hr class="product-details-back-container-hr" />
+<div class="product-details-back-container">
+    <a asp-action="Index">Geri Dön</a> > @Html.DisplayFor(model => model.Name)
+</div>

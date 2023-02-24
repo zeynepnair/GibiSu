@@ -1,0 +1,66 @@
+﻿@model IEnumerable<GibiSu.Models.OrderProduct>
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore;
+@using GibiSu.Data;
+@inject ApplicationDbContext context;
+@inject SignInManager<ApplicationUser> _signInManager;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var products = context.Products;
+
+    var users = _signInManager.UserManager.Users;
+    
+}
+<script>
+    function GetSellingProduct(){
+        var selectP = $('#SelectedProduct').val();
+        var selectProduct = $('#SelectedP [value="' + selectP + '"]').data('value');
+        var selectU = $('#SelectedUser').val();
+        var selectUser = $('#SelectedU [value="' + selectU + '"]').data('value');
+        var inputFirstDate = document.getElementById("FirstDate").value;
+        var inputLastDate = document.getElementById("LastDate").value;
+        $("#GetReport").load("@Url.Action("Reports","OrderProducts")?SelectProductId=" + selectProduct + "&SelectUser=" + selectUser + "&FirstOrderDate=" + inputFirstDate + "&LastOrderDate=" + inputLastDate);
+    }
+</script>
+<h1 style="text-align:center;color:black;margin-bottom:50px;">Rapor</h1>
+<div class="">
+    <div class="">
+        <form enctype="multipart/form-data">
+            <div style="margin-bottom:15px;" class="form-group">
+                <input id="SelectedProduct" class="form-control" type="text" list="SelectedP" placeholder="Ürün Adını Giriniz..." />
+                <datalist id="SelectedP" >
+                    @foreach (var item3 in products)
+                    {
+                        <option data-value="@item3.Id" value="@item3.Name" class="form-control"></option>
+                    }
+                </datalist>
+            </div>
+            <div class="form-group">
+                <input id="SelectedUser" class="form-control" type="text" list="SelectedU" placeholder="Müşteri Adını Giriniz..." />
+                <datalist id="SelectedU" >
+                    @foreach (var item3 in users)
+                    {
+                        <option data-value="@item3.Id" value="@item3.Name" class="form-control"> </option>
+                    }
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Başlangıç Tarihi</label>
+                <input id="FirstDate" type="date" class="form-control" />
+                <span class="text-danger"></span>
+                <label class="control-label">Bitiş Tarihi</label>
+                <input id="LastDate" type="date" class="form-control" />
+                <span class="text-danger"></span>
+            </div>
+            <div style="margin-top:15px;" class="form-group">
+                <input onclick="GetSellingProduct()"  type="button" value="Raporu Getir" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table" id="GetReport">
+   
+</table>

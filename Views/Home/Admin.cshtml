@@ -1,0 +1,62 @@
+﻿
+@{
+   ViewData["Title"] = "Admin";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 border-end" style="display: grid; justify-content: end; align-items: center; justify-items: start;">
+            <h2>Admin Paneli</h2>
+            <hr />
+            <ul style="list-style-type: disclosure-closed;">
+                <li>
+                    <label>Menüler</label>
+                    <a asp-controller="Menus" asp-action="Create">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                     </a>
+                     <a asp-controller="Menus" asp-action="Index">
+                         <i class="fa fa-list" aria-hidden="true"></i>
+                     </a>                     
+                </li>
+                <li>
+                    <label>Sayfalar</label>
+                    <a asp-controller="Pages" asp-action="Create">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                     </a>
+                     <a asp-controller="Pages" asp-action="Index">
+                         <i class="fa fa-list" aria-hidden="true"></i>
+                     </a>
+                </li>
+                <li>
+                    <label>İçerikler</label>
+                    <a asp-controller="Contents" asp-action="Create">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                     </a>
+                     <a asp-controller="Contents" asp-action="Index">
+                         <i class="fa fa-list" aria-hidden="true"></i>
+                     </a>
+                </li>
+                <li>
+                    <label>Ürünler</label>
+                    <a asp-controller="Products" asp-action="Create">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                     </a>
+                     <a asp-controller="Products" asp-action="Index">
+                         <i class="fa fa-list" aria-hidden="true"></i>
+                     </a>
+                </li>
+            </ul>
+        </div>
+@*        <div class="col-10">
+             @foreach (var item in contentss)
+                            {
+                                @if(item.PageUrl == "Gizlilik-ayarlari"){
+                                @if (item.Text != null)
+                                {
+                                    @Html.Raw(item.Text.Replace("\r\n","<br/>"))
+                                }
+                                }
+                            }
+        </div>*@
+
+    </div>
+</div>

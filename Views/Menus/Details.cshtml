@@ -1,0 +1,26 @@
+﻿@model GibiSu.Models.Menu
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container-fluid" style="background-color: white; height:100vh;">
+<h1>Detaylar</h1>
+
+<div>
+    <h4>Menü</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary btn-sm">Güncelle</a> 
+    <a asp-action="Index" class="btn btn-warning btn-sm">Listeye Geri Dön</a>
+</div>
+</div>

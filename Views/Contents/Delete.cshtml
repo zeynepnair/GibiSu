@@ -1,0 +1,52 @@
+﻿@model GibiSu.Models.Content
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container-fluid" style="background-color: white;">
+<h1>Sil</h1>
+
+<h3>Bunu silmek istediğinize emin misiniz?</h3>
+<div>
+    <h4>İçerik</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Image)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Order)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Order)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Page)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Page.Url)
+        </dd>
+    </dl>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Sil" class="btn btn-danger btn-sm" style="margin-bottom: 10px;" /> 
+        <a asp-action="Index" class="btn btn-warning btn-sm" style="margin-bottom: 10px;">Listeye Geri Dön</a>
+    </form>
+</div>
+</div>

@@ -1,0 +1,111 @@
+﻿
+@{
+    Layout = null;
+    
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/GibiSu.styles.css" asp-append-version="true" />
+    <link rel="icon" sizes="16x16" href="https://i.ibb.co/JtdRzwR/Whats-App-Image-2023-01-10-at-12-54-28-removebg-preview.png" />
+    <link href="~/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row" style="height:100vh;">
+        <div class="list-group adminpanel col-2 border-end" >
+            <h2><a  asp-controller="Admin" asp-action="Index" style="text-decoration: none;">Admin Paneli</a></h2>
+            <hr />
+            <div class="dropdown">
+                <button class="btn btn-secondary btnAdmin dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Menüler
+                </button>
+                <ul class="dropdown-menu AdminUl" >
+                    <li><a class="dropdown-item" asp-controller="Menus" asp-action="Create">Create</a>
+                    <li> <a class="dropdown-item" asp-controller="Menus" asp-action="Index">Index</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary btnAdmin dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sayfalar
+                </button>
+                <ul class="dropdown-menu AdminUl">
+                    <li><a class="dropdown-item" asp-controller="Pages" asp-action="Create">Create</a>
+                    <li> <a class="dropdown-item" asp-controller="Pages" asp-action="Sayfalar" >Index</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary btnAdmin dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    İçerikler
+                </button>
+                <ul class="dropdown-menu AdminUl">
+                    <li><a class="dropdown-item" asp-controller="Contents" asp-action="Create">Create</a>
+                    <li> <a class="dropdown-item" asp-controller="Contents" asp-action="Index">Index</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary btnAdmin dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Ürünler
+                </button>
+                <ul class="dropdown-menu AdminUl">
+                    <li><a class="dropdown-item" asp-controller="Products" asp-action="Create">Create</a>
+                    <li> <a class="dropdown-item" asp-controller="Products" asp-action="ProductsEdit">Index</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary btnAdmin dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Bekleyen Siparişler
+                </button>
+                <ul class="dropdown-menu AdminUl">
+                    <li><a class="dropdown-item" asp-controller="Orders" asp-action="OrderTracking">Bekleyen Siparişler</a>
+                    </li>
+                </ul>
+            </div>
+             <div class="dropdown">
+                <button class="btn btn-secondary btnAdmin dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Raporlar
+                </button>
+                <ul class="dropdown-menu AdminUl">
+                    <li><a class="dropdown-item" asp-controller="OrderProducts" asp-action="SellingProducts">Sipariş Raporları</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <a class="btn btn-secondary btnAdmin" type="button" href="/Users/Index" aria-expanded="false">
+                   Üyeler
+                </a>
+            </div>
+            <div class="dropdown">
+                <a href="/Users/AdminList" class="btn btn-secondary btnAdmin" type="button" aria-expanded="false">
+                    Kullanıcılar
+                </a>
+            </div>
+                
+
+            <i class="fa-solid fa-gear" style="bottom: 0; position: absolute; right: 0; font-size: 22px; margin-right: 5px; margin-bottom:5px;"></i>
+            
+            
+        </div>
+        <div class="col-10" style="position: absolute; right: 0; background-color:white;">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>

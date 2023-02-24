@@ -1,0 +1,174 @@
+﻿@model GibiSu.Models.Page
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; 
+}
+<script>
+    var contentCount = 0;
+    function DeleteContent(contentNumber) {
+        var deletedContent = document.getElementById("contentNew-"+contentNumber);
+        deletedContent.remove();
+        var j=0;
+        var toplam=0;
+        for(let i=0; i<=contentCount; i++){
+            if(i > contentNumber){
+                toplam = contentNumber + j;
+                deletedContent = document.getElementById("Contents_"+i+"__Title");
+                deletedContent.id = "Contents_" + toplam + "__Title";
+                deletedContent.setAttribute('name', "Contents[" + toplam + "].Title");
+
+                deletedContent = document.getElementById("Contents_" + i + "__Text");
+                deletedContent.id = "Contents_" + toplam + "__Text";
+                deletedContent.setAttribute('name', "Contents[" + toplam + "].Text");
+                
+                deletedContent = document.getElementById("Contents_" + i + "__FormImage");
+                deletedContent.id = "Contents_" + toplam + "__FormImage";
+                deletedContent.setAttribute('name', "Contents[" + toplam + "].FormImage");
+
+                deletedContent = document.getElementById("Contents_" + i + "__Type");
+                deletedContent.id = "Contents_" + toplam + "__Type";
+                deletedContent.setAttribute('name', "Contents[" + toplam + "].Type");
+
+                deletedContent = document.getElementById("Contents_" + i + "__Order");
+                deletedContent.id = "Contents_" + toplam + "__Order";
+                deletedContent.setAttribute('name', "Contents[" + toplam + "].Order");
+
+                deletedContent = document.getElementById("Contents_" + i + "__PageUrl");
+                deletedContent.id = "Contents_" + toplam + "__PageUrl";
+                deletedContent.setAttribute('name', "Contents[" + toplam + "].PageUrl");
+
+                deletedContent = document.getElementById("contentNew-" + i);
+                deletedContent.id = "contentNew-" + toplam;
+
+                deletedContent = document.getElementById("button-" + i);
+                deletedContent.setAttribute ( "value", toplam);
+                j++;
+            }
+        }
+        contentCount--;
+    }
+    function Preview(){
+        var con;
+        var pUrl = document.getElementById("Url");
+        for(let i=0; i<=contentCount; i++){
+            con = document.getElementById("Contents_"+i.toString()+"__PageUrl");
+            alert(i);
+            con.value = pUrl.value;
+        }
+        var formData = new FormData($("#pageForm")[0]);
+        //con0.value=pUrl.value;
+       alert(contentCount);
+        $.ajax({
+            url: '@Url.Action("Preview","Pages")', // point to server-side controller method
+            dataType: 'html', // what to expect back from the server
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            type: 'post',
+            success: function (response) {
+                $('#PagePreview').html(response); // display success response from the server
+            },
+            error: function (response) {
+                $('#PagePreview').html(response); // display error response from the server
+            }
+        });
+
+    }
+    function NewContent() {
+        contentCount++;
+        var contentNew = document.createElement("div");
+        contentNew.id="contentNew-"+contentCount.toString();
+        var contentAll= document.getElementById("ContentNew");
+        contentAll.appendChild(contentNew);
+        $("#"+contentNew.id).load("@Url.Action("NewContent","Pages")?i=" + contentCount);
+    }
+</script>
+<div class="container-fluid" style="background-color: white; margin-bottom:25px">
+<h1>Sayfa Oluştur</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype = "multipart/form-data" id="pageForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Url" class="control-label"></label>
+                <input asp-for="Url" class="form-control" />
+                <span asp-validation-for="Url" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FormImage" class="control-label"></label>
+                <input asp-for="FormImage" class="form-control" />
+                <span asp-validation-for="FormImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MenuId" class="control-label"></label>
+                <select asp-for="MenuId" class ="form-control" asp-items="ViewBag.MenuId">
+                    <option asp-for ="MenuId" class="form-control" value="Seçiniz" selected disabled>Seçiniz</option>
+                </select>
+            </div>
+                <div id="ContentNew">
+                    <div id="contentNew-0">
+                        <div class="form-group">
+                            <label asp-for="Contents[0].Title" class="control-label"></label>
+                            <input asp-for="Contents[0].Title" class="form-control" />
+                            <span asp-validation-for="Contents[0].Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Contents[0].Text" class="control-label"></label>
+                            <textarea asp-for="Contents[0].Text" class="form-control"></textarea>
+                            <span asp-validation-for="Contents[0].Text" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Contents[0].FormImage" class="control-label"></label>
+                            <input asp-for="Contents[0].FormImage" class="form-control" />
+                            <span asp-validation-for="Contents[0].FormImage" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Contents[0].Type" class="control-label"></label>
+                            <input asp-for="Contents[0].Type" class="form-control" />
+                            <span asp-validation-for="Contents[0].Type" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Contents[0].Order" class="control-label"></label>
+                            <input asp-for="Contents[0].Order" class="form-control" />
+                            <span asp-validation-for="Contents[0].Order" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input hidden asp-for="Contents[0].PageUrl" value="" class="form-control" />
+                        </div>
+                        <div style="">
+                            <span>
+                                <button id="button-0" onclick="DeleteContent(this.value)" value="0" class="cart-count-btn btn btn-primary">
+                                    - </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <input type="button" onclick="NewContent()" value="+" class="btn btn-success btn-sm" />
+                </div>
+                <div class="form-group" style="margin-bottom: 10px; margin-top: 10px;">
+                    <input type="submit" value="Oluştur" class="btn btn-primary btn-sm" />
+                    <input type="button" onclick="Preview()" value="Önizleme" class="btn btn-success btn-sm" />
+                    <a asp-action="Index" class="btn btn-warning btn-sm">İçerikler Listesine Geri Dön</a>
+                    <a asp-action="Sayfalar" class="btn btn-warning btn-sm">Sayfalar Listesine Geri Dön</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="PagePreview">
+
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
